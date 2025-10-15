@@ -1,39 +1,38 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
+from data_utils import load_nea_data
 
 
 
 def kizart():
-    st.title("Kizárt projektek")
-    # Read data
-    df = pd.read_csv("/home/mihaly/python_codes/nea/nea_data.csv")
-    # drop the first column
-    df = df.iloc[:, 1:]
-
-    # If needed, rename columns only if there are exactly 5 columns
-    expected_cols = ["Név", "Azonosító", "Igényelt támogatás", "Státusz", "Kizárás"]
-    df.columns = expected_cols
-    df["Igényelt támogatás"] = df["Igényelt támogatás"].replace({" " : ""}, regex=True).astype(int)
-    df.sort_values("Igényelt támogatás", inplace=True)
-
-    st.dataframe(df)
-
-    # for each unique status generate a plotly plot where you grupb by Név and calculate tne nomber of rows and sum of Igényelt támogatás
-    grouped = (df
-        .groupby(["Név", "Státusz"])
-        .agg(
-            projekt_szam=("Név", "count"),
-            tamogatas_osszesen=("Igényelt támogatás", "sum")
+    df = load_nea_data()
+    df = df[df["Kizárás"]=='Igen']
+    if df.empty:
+        st.warning("Nincsenek kizárt projektek az adatok között.")
+        return
+    else:
+        st.title("Kizárt projektek")
+        # download button for the dataframe
+        st.download_button(
+            label="Kizárt projektek letöltése CSV-ben",
+            data=df.to_csv(index=False).encode('utf-8'),
+            file_name='kizart_nea_data.csv',
+            mime='text/csv',
         )
-        .reset_index()
-        .rename(columns={"projekt_szam": "Projekt szám", "tamogatas_osszesen": "Támogatás összesen"})
-    )
-    grouped.sort_values("Támogatás összesen", inplace=True, ascending=False)
-    # format large numbers in column "Támogatás összesen" with spaces as thousand separators
-    grouped["Támogatás összesen"] = grouped["Támogatás összesen"].apply(lambda x: f"{x:,}".replace(",", " "))   
+        df_to_show = df.copy()
+        df_to_show["Igényelt támogatás"] = df_to_show["Igényelt támogatás"].apply(lambda x: f"{x:,}".replace(",", " "))
+        st.dataframe(df_to_show)    
 
-    st.dataframe(grouped)
+        kizart_df_agg = (df
+            .groupby(["Név", "Kizárás"])
+            .agg(
+                kizart_projektek__szama=("Név", "count"),
+            )
+            .reset_index()
+            .rename(columns={"kizart_projektek__szama": "Kizárt projektek száma"})
+        )
+        kizart_df_agg.reset_index(drop=True, inplace=True)
+        st.dataframe(kizart_df_agg)
 
 
 kizart()

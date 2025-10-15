@@ -13,20 +13,20 @@ supported_site = st.Page(
     default=True,
 )
 
-#kizart_site = st.Page(
-#    "views/kizart.py",
-#    title="Kizart projektek",
-#    icon=":material/trending_up:",
-#)
+kizart_site = st.Page(
+    "views/kizart.py",
+    title="Kizart projektek",
+    icon=":material/trending_up:",
+)
+
 
 
 
 
 pg = st.navigation(
     {
-        "Támogatott projektek": [supported_site]
-        
-
+        "Összes projektek": [supported_site],
+        "Kizárt projektek": [kizart_site]
     }
 )
 
