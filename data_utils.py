@@ -3,7 +3,7 @@ import pandas as pd
 
 @st.cache_data
 def load_nea_data():
-    df = pd.read_csv("nea_data.csv")
+    df = pd.read_csv("nea.csv")
     df = df.iloc[:, 1:]
     expected_cols = ["Név", "Azonosító", "Igényelt támogatás", "Státusz", "Kizárás"]
     df.columns = expected_cols
