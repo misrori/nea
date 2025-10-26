@@ -13,6 +13,10 @@ def load_nea_data():
     # remowe the startin " 
     df["Név"] = df["Név"].str.replace(r'^"', '', regex=True)
 
+    # remove all ˝
+    df["Név"] = df["Név"].str.replace(r'˝', '', regex=True)
+    df["Név"] = df["Név"].str.replace(r',,', '', regex=True)
+
     #remowe all "
     df["Név"] = df["Név"].str.replace(r'"', '', regex=True)
 
