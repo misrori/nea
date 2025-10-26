@@ -33,11 +33,10 @@ def nyertes():
                 nyertes_projektek__szama=("Név", "count"),
             )
             .sort_values(by="elnyert_tamogatás_összege", ascending=False)
-            #.reset_index()
+            .reset_index()
             .rename(columns={"elnyert_tamogatás_összege": "Elnyert támogatás összege", 
                              "nyertes_projektek__szama": "Nyertes projektek száma"})
         )
-        nyertes_df_agg.reset_index(drop=True, inplace=True)
         top20_nyertes = nyertes_df_agg.head(20).copy()
         nyertes_df_agg["Elnyert támogatás összege"] = nyertes_df_agg["Elnyert támogatás összege"].apply(lambda x: f"{x:,}".replace(",", " "))
         st.title("Összesítés név szerint")
