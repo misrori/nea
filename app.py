@@ -19,6 +19,11 @@ kizart_site = st.Page(
     icon=":material/trending_up:",
 )
 
+nyertes_site = st.Page(
+    "views/nyertes.py",
+    title="Nyertes projektek",
+    icon=":material/star:",
+)
 
 
 
@@ -26,7 +31,8 @@ kizart_site = st.Page(
 pg = st.navigation(
     {
         "Összes projektek": [supported_site],
-        "Kizárt projektek": [kizart_site]
+        "Nyertes projektek": [nyertes_site],
+                "Kizárt projektek": [kizart_site]
     }
 )
 
