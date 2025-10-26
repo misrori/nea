@@ -1,7 +1,8 @@
 import streamlit as st
 import pandas as pd
 
-@st.cache_data
+# cashe data for 1 hour
+@st.cache_data(ttl=3600)
 def load_nea_data():
     df = pd.read_csv("nea.csv")
     df = df.iloc[:, 1:]
